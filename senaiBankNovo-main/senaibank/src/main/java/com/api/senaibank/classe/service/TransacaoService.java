@@ -33,5 +33,9 @@ public class TransacaoService {
  public void delete(Long id){
     transacaoRepository.deleteById(id);
  }
+public List<Transacao> getExtrato(Long idConta) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getExtrato'");
+}
 
 }

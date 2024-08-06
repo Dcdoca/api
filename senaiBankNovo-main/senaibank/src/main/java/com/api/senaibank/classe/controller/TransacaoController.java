@@ -22,6 +22,16 @@ public class TransacaoController {
         }
         return ResponseEntity.badRequest().body("Saldo insuficiente");
     }
+    @GetMapping("/extrato/{id}")
+    public ResponseEntity<List<Transacao>> getExtrato (@PathVariable Long idConta) {
+        List<Transacao> extrato = transacaoService.getExtrato(idConta);
+        
+        if (extrato.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(extrato);
+    }
     @GetMapping
     public ResponseEntity<List<Transacao>> getAll(){
         return ResponseEntity.ok(transacaoService.getAll());
