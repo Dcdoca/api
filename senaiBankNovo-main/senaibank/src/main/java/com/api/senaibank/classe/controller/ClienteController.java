@@ -3,6 +3,8 @@ package com.api.senaibank.classe.controller;
 import com.api.senaibank.classe.Cliente;
 import com.api.senaibank.classe.service.ClienteService;
 
+import dto.ClienteUpdateDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ public class ClienteController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    
     @GetMapping("/ativos")
     public ResponseEntity<List<Cliente>> getAllAtivos(){
         List<Cliente> clientes = clienteService.getAllAtivos();
@@ -58,6 +61,19 @@ public class ClienteController {
         clienteService.atualizarCliente(clienteSalvo, cliente);
 
         return ResponseEntity.ok(clienteService.getById(id));
+
+    }
+    @PutMapping("/dto/{id}")
+    public ResponseEntity<ClienteUpdateDTO> updateDTO (@PathVariable Long id, @RequestBody ClienteUpdateDTO clienteNovo) {
+        Cliente clienteExistente = clienteService.getById(id);
+
+        if (clienteExistente == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ClienteUpdateDTO clienteDTO = clienteService.updateDTO(clienteExistente, clienteNovo);
+
+        return ResponseEntity.ok(clienteDTO);
 
     }
 

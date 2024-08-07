@@ -1,5 +1,6 @@
 package com.api.senaibank.classe.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.api.senaibank.classe.Cliente;
 import com.api.senaibank.classe.repository.ClienteRepository;
+
+import dto.ClienteDTO;
+import dto.ClienteUpdateDTO;
 
 @Service
 public class ClienteService {
@@ -68,4 +72,49 @@ public class ClienteService {
         return atualizarCliente(cliente, clienteInativo);
 
     }
+
+     public ClienteUpdateDTO updateDTO(Cliente clienteExistente, ClienteUpdateDTO clienteNovo) {
+
+        // Converter o que é DTO pra Cliente
+
+        if (clienteNovo.getNome() != null) {
+            clienteExistente.setNome(clienteNovo.getNome());
+        }
+        if (clienteNovo.getTelefone() != null) {
+            clienteExistente.setTelefone(clienteNovo.getTelefone());
+        }
+        if (clienteNovo.getEmail() != null) {
+            clienteExistente.setEmail(clienteNovo.getEmail());
+        }
+
+        // Atualizar o clienteExistente com os dados do clienteNovo
+        Cliente clienteSalvo = clienteRepository.save(clienteExistente);
+
+        // Converter o Cliente pra DTO 
+        ClienteUpdateDTO clienteDTO = new ClienteUpdateDTO();
+        clienteDTO.setId(clienteSalvo.getId());
+        clienteDTO.setNome(clienteSalvo.getNome());
+        clienteDTO.setTelefone(clienteSalvo.getTelefone());
+        clienteDTO.setEmail(clienteSalvo.getEmail());
+
+        // Retornar
+        return clienteDTO;
+    }
+
+    public List<ClienteDTO> getClientesDTO() {
+
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        List<ClienteDTO> clientesDTO = new ArrayList<>();
+
+        for (Cliente cliente : clientes) {
+            ClienteDTO clienteDTO = new ClienteDTO();
+            clienteDTO.setId(cliente.getId());
+            clienteDTO.setNome(cliente.getNome());
+
+            clientesDTO.add(clienteDTO);
+        }
+        return clientesDTO;
+    }
 }
+
